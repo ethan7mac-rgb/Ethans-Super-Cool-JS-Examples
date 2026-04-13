@@ -5,12 +5,37 @@ window.onload = function(){
     let btnDisplay = document.querySelector("#btnDisplayName");
     //Add an event listener
     btnDisplay.addEventListener("click", DisplayButtonClick);
-    //Same thing as above but oneline
+
+    //More button register but one line
+    document.querySelector("#btnDrinkDisplay").addEventListener("click", DisplayDrink);
+
     //This also doesnt clear our array so if you want to see its effects refresh
-    document.querySelector("#btnClear").addEventListener("click", () => localStorage.clear());//Dw about this its a lambda if your curious
+    document.querySelector("#btnClear").addEventListener("click", () => localStorage.clear());//Dw about this its a lambda if your curious   
+
+    //Standard AJAX Call
+    let url = 'VeryCoolJS.json';
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        JsonParse(xhr.responseText)//Remember this is all you need to change but i like to have a method just for JSON Parse
+    }
+    };
+    xhr.open("GET", url, true);
+    xhr.send();
 }
 //Declare a empty global array for later
 let names = [];
+let VeryCoolJason = [];
+
+function JsonParse(text){
+    //Parse the JSON
+    VeryCoolJason = JSON.parse(text);
+    //confirm it was parsed
+    console.log("Data Parsed");
+    //Call the first thing we do with our JSON
+    BuildRadioButtons();
+}
+
 //New function called by the button
 //This will display our stored names in our <div id="names">
 function DisplayButtonClick(){
@@ -23,7 +48,7 @@ function DisplayButtonClick(){
     //Empty strings are dumb and i dont like em so we arent gonna let it push the user variable to our array
     //Checks if user isnt empty
     if(user !== ''){
-        //Pushes out user variable to names
+        //Pushes our user variable to names
         names.push(user);
     }
     //Anotha console log check
@@ -87,4 +112,44 @@ function NameClick(e){
     console.log(selectedName);
     //Another JS message box for reading clicked element
     alert(selectedName);
+}
+
+//Radio button time
+//You may notice we have no radio buttons we are gonna build them here
+function BuildRadioButtons(){
+    //More document query
+    let radio = document.querySelector("#radioEX");
+    //If you look at my JSON we first need to select drinks from it this is likely to be used multiple times so we should put it in a variable
+    let drinks = VeryCoolJason.drinks;
+    //Now were gonna make some radio button html
+    let html = "";
+    for(let i = 0; i < drinks.length; i++){
+        //I highly reccomend you make and example in your html page
+        //My example html I made to make this "<input type="radio" name="drinks" id="drinkName"> Drink"
+        html += '<input type="radio" ' //note using ' ' lets you use " " in your html
+        html += 'name="drinks" ';//they all need the same name or else we could select multiple
+        html += 'value="' + drinks[i] + '">'; //remember to close your html still (Also remeber to make sure your html in places like this are still using " " around values)
+        html += drinks[i]; //if you look at the JSON this should always be our drink name
+        html += '<br>'; //puts a break inbetween our radio buttons
+    }
+    //finally write to our html
+    radio.innerHTML += html;//Note += or else it will overwrite our title
+}
+
+function DisplayDrink(){
+    //CONSOLE LOG!!!!!!!!!!!!!!!!!!!!!!!!!!
+    console.log("DisplayDrinkClick");
+    //Slect where we are writing too
+    let favDrinkHTML = document.querySelector("#favDrink");
+    //This selects any checked input with the name drinks
+    let selectedDrink = document.querySelector('input[name="drinks"]:checked');//You could totally copy this and replace name with whatever you want
+    //Checking if you didnt select an option
+    if(!selectedDrink){
+        //Setting the html to a message instead of a variable
+        favDrinkHTML.innerHTML = "Please select a option";
+        //early return to prevent below code fromexecuting
+        return;
+    }
+    //Finally set innerHtml and remeber its a input so .value is needed
+    favDrinkHTML.innerHTML = selectedDrink.value;
 }
