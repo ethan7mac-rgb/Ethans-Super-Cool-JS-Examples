@@ -5,16 +5,24 @@ window.onload = function(){
     let btnDisplay = document.querySelector("#btnDisplayName");
     //Add an event listener
     btnDisplay.addEventListener("click", DisplayButtonClick);
+    //Same thing as above but oneline
+    //This also doesnt clear our array so if you want to see its effects refresh
+    document.querySelector("#btnClear").addEventListener("click", () => localStorage.clear());//Dw about this its a lambda if your curious
 }
 //Declare a empty global array for later
 let names = [];
 //New function called by the button
-//This will display our stored names in our <p id="names">
+//This will display our stored names in our <div id="names">
 function DisplayButtonClick(){
     //Call StorageGet first as if we dont it would overwrite our stored array
     StorageGet();
     //Select the value from the input !!Value is needed for all inputs!!
     let user = document.querySelector("#userName").value;
+    //Empty strings are dumb and i dont like em
+    if(user === ''){
+        alert("NO EMPTY STRINGS!");
+        return;
+    }
     //Console log most times you grab an input to make sure its actually being pulled
     console.log(user);
     //We are gonna store it in an array
@@ -62,3 +70,6 @@ function DisplayUsers(){
     //Now were gonna overwrite the html of namesHtml variable
     namesHtml.innerHTML = html;
 }
+
+//Now its time for very cool target stuff and selecting child elements
+
