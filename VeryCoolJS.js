@@ -112,6 +112,8 @@ function NameClick(e){
     console.log(selectedName);
     //Another JS message box for reading clicked element
     alert(selectedName);
+    //This is for later but calls MakeObj when you click a Name
+    MakeObj(selectedName);
 }
 
 //Radio button time
@@ -152,4 +154,33 @@ function DisplayDrink(){
     }
     //Finally set innerHtml and remeber its a input so .value is needed
     favDrinkHTML.innerHTML = selectedDrink.value;
+}
+
+//This totally isnt me making this all come together last second
+//Goal here is make an object using stuff weve already done
+//This function accepts a variable
+function MakeObj(name){
+    //so the goal here is make a object with the name and fav drink
+    //first we need our two values in the object
+    let favDrink = document.querySelector("#favDrink").innerHTML;
+    //If the user hasnt selected a favDrink we dont wanna do anything else so we return
+    if(favDrink === "")//Need to check for empty string here since we are using innerHtml and null or no value is an empty string
+        return;
+    //This will be our objects structure
+    let person = {
+        //Properties of our object
+        PersonName: name,
+        FavoriteDrink: favDrink
+    }
+    //Send in our person we made
+    DisplayPerson(person);
+}
+//This will display our person
+function DisplayPerson(person){
+    //i feel like i can stop commenting document.querySelector by now
+    let objDisplay = document.querySelector("#objEX");
+    //remeber this is just like C# person is just a generic person object so we can use person.PersonName
+    let html = "<h4>"+person.PersonName+' ';
+    html += person.FavoriteDrink+"</h4>";
+    objDisplay.innerHTML = html;
 }
