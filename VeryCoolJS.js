@@ -18,18 +18,17 @@ function DisplayButtonClick(){
     StorageGet();
     //Select the value from the input !!Value is needed for all inputs!!
     let user = document.querySelector("#userName").value;
-    //Empty strings are dumb and i dont like em
-    if(user === ''){
-        alert("NO EMPTY STRINGS!");
-        return;
-    }
     //Console log most times you grab an input to make sure its actually being pulled
     console.log(user);
-    //We are gonna store it in an array
-    names.push(user);
+    //Empty strings are dumb and i dont like em so we arent gonna let it push the user variable to our array
+    //Checks if user isnt empty
+    if(user !== ''){
+        //Pushes out user variable to names
+        names.push(user);
+    }
     //Anotha console log check
     console.log(names);
-    //Call out storage set function. We dont need to send the array in since its global
+    //Call storage set function. We dont need to send the array in since its global
     StorageSet();
     //Now were gonna display all users
     DisplayUsers();
@@ -69,7 +68,23 @@ function DisplayUsers(){
     }
     //Now were gonna overwrite the html of namesHtml variable
     namesHtml.innerHTML = html;
+
+    //See below this for why this is here and what it does
+    NameClickEventListener();
 }
 
-//Now its time for very cool target stuff and selecting child elements
-
+//Now its time for very cool target stuff the goal here is to have it alert everytime we click a name
+//Importantly we have to call this after the names are made so we have to call it in DisplayUsers
+function NameClickEventListener(){
+    //Notice we can addEventListener to a Div and it will apply it to all clicked elements
+    document.querySelector("#names").addEventListener('click', NameClick);
+}
+//'e' here represents the element clicked but the whole element including html
+function NameClick(e){
+    //Assign selectedName the innerHTML of our target
+    let selectedName =  e.target.innerHTML;//Importantly if we dont do innerHTML it would read out the html element (Aka an htmlObject)
+    //CONSOLE LOG PLEASE ITS SO HELPFUL
+    console.log(selectedName);
+    //Another JS message box for reading clicked element
+    alert(selectedName);
+}
